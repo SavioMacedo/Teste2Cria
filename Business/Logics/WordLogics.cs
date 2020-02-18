@@ -35,7 +35,7 @@ namespace Business.Logics
 
                 try
                 {
-                    value = UnitOfWork.Word.Get(mid);
+                    value = UnitOfWork.Word.GetAsync(mid).GetAwaiter().GetResult();
 
                     if (value == word)
                     {
@@ -61,19 +61,21 @@ namespace Business.Logics
                         {
                             result.DeadCats++;
                             start = mid;
-                            end *= 2;
+
+                            if (lastIndexException != 0 && (end * 2) > lastIndexException)
+                            {
+                                var random = new Random();
+                                end = random.Next(mid, lastIndexException);
+                            }
+                            else
+                                end *= 2;
                         }
                     }
                 }
-                //catch (Exception erro)
-                //{
-                //    result.DeadCats++;
-                //    end = mid;
-                //}
-                catch (IndexOutOfRangeException erro)
+                catch (Exception erro)
                 {
+                    lastIndexException = end;
                     result.DeadCats++;
-                    lastIndexException = mid;
                     end = mid;
                 }
             }

@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Business.Interfaces
 {
     public interface IRepository<TEntity> where TEntity: class
     {
         IUnitOfWork UnitOfWork { get; set; }
-        IQueryable<string> GetAll();
-        string Get(int index);
-        string FirstOrDefault();
+        Task<string> GetAsync(int index);
     }
 }

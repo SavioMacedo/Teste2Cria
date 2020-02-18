@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infra.Repository
 {
@@ -11,19 +12,21 @@ namespace Infra.Repository
     {
         public IUnitOfWork UnitOfWork { get; set; }
 
-        public string FirstOrDefault()
+        public async Task<string> GetAsync(int index)
         {
-            return GetAll().FirstOrDefault();
-        }
+            try
+            {
+                var response = await UnitOfWork.Client.GetAsync($"http://teste.criainovacao.com.br/api/Dicionario/{index}");
 
-        public string Get(int index)
-        {
-            return UnitOfWork.FileStream[index];
-        }
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsStringAsync();
 
-        public IQueryable<string> GetAll()
-        {
-            return UnitOfWork.FileStream.AsQueryable();
+                throw new Exception("Out of Index");
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 
