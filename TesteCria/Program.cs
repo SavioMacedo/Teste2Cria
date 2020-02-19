@@ -21,7 +21,7 @@ namespace TesteCria
                 var result = WordLogics.GetWord(palavra);
 
                 Console.WriteLine("------------------------------");
-                Console.WriteLine($"Achada: {result.FoundWord} | Gatos Mortos: {result.DeadCats}");
+                Console.WriteLine($"Achada: {result.FoundWord} | Gatos Mortos: {result.DeadCats} | Indice: {result.Index}");
                 Console.WriteLine("------------------------------");
             }
         }

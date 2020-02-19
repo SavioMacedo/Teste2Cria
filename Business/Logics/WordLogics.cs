@@ -35,21 +35,26 @@ namespace Business.Logics
 
                 try
                 {
-                    value = UnitOfWork.Word.GetAsync(mid).GetAwaiter().GetResult();
+                    value = UnitOfWork.Word.GetAsync(mid).GetAwaiter().GetResult().Replace("\"","");
 
                     if (value == word)
                     {
                         result.FoundWord = true;
+                        result.Index = mid;
                         return result;
                     }
                     else if (end <= start)
                     {
                         result.FoundWord = false;
+                        result.Index = 00000000000;
                         return result;
                     }
                     else
                     {
+                        //var firstValue = value.Substring(0, 1);
+                        //var firstWord = word.Substring(0, 1);
 
+                        //var compare = firstValue.CompareTo(firstWord);
                         var compare = value.CompareTo(word);
 
                         if (compare == 1)
@@ -82,6 +87,7 @@ namespace Business.Logics
             while (value != word && end > start);
 
             result.FoundWord = false;
+            result.Index = 000000000000;
             return result;
         }
     }

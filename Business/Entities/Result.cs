@@ -8,5 +8,6 @@ namespace Business.Entities
     {
         public bool FoundWord { get; set; }
         public int DeadCats { get; set; }
+        public int Index { get; set; }
     }
 }
