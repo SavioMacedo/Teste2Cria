@@ -1,7 +1,9 @@
 ﻿using System;
-using Business.Logics;
+using Business.Interfaces;
 using CrossCutting.Extensions;
+using CrossCutting.IoC;
 using Infra.Context;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TesteCria
 {
@@ -9,8 +11,12 @@ namespace TesteCria
     {
         static void Main(string[] args)
         {
-            var unitOfWork = new UnitOfWork();
-            var WordLogics = new WordLogics(unitOfWork);
+            var serviceProvider = new ServiceCollection()
+                .AddInjections()
+                .BuildServiceProvider();
+
+            var WorldLogics = serviceProvider.GetService<IWordLogics>();
+
 
             while (true)
             {
@@ -18,7 +24,7 @@ namespace TesteCria
                 var palavra = Console.ReadLine();
                 Console.WriteLine($"Procurando {palavra}");
 
-                var result = WordLogics.GetWord(palavra);
+                var result = WorldLogics.GetWord(palavra);
 
                 Console.WriteLine("------------------------------");
                 Console.WriteLine($"Achada: {result.FoundWord} | Gatos Mortos: {result.DeadCats} | Indice: {result.Index}");

@@ -2,24 +2,25 @@
 using Business.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Logics
 {
-    public class WordLogics
+    public class WordLogics : IWordLogics
     {
         private IUnitOfWork UnitOfWork { get; set; }
-        
+
         public WordLogics(IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
         }
 
-        public Result GetWord(string word) 
+        public Result GetWord(string word)
         {
             var result = new Result();
 
-            BinarySearch(word, 0, 10000, ref result);
+            BinarySearch(word, 0, 1, ref result);
 
             return result;
         }
@@ -27,6 +28,7 @@ namespace Business.Logics
         private Result BinarySearch(string word, int start, int end, ref Result result)
         {
             var value = "";
+            var repetitiveIndex = new List<int>();
             var lastIndexException = 0;
 
             do
@@ -35,7 +37,14 @@ namespace Business.Logics
 
                 try
                 {
-                    value = UnitOfWork.Word.GetAsync(mid).GetAwaiter().GetResult().Replace("\"","");
+
+                    while (repetitiveIndex.Contains(mid))
+                    {
+                        mid++;
+                    };
+
+                    value = UnitOfWork.Word.GetAsync(mid).GetAwaiter().GetResult().Replace("\"", "");
+                    result.DeadCats++;
 
                     if (value == word)
                     {
@@ -59,12 +68,11 @@ namespace Business.Logics
 
                         if (compare == 1)
                         {
-                            result.DeadCats++;
-                            end = mid;
+                            repetitiveIndex.Add(mid);
+                            end = (mid == 0) ? 1 : mid;
                         }
                         else
                         {
-                            result.DeadCats++;
                             start = mid;
 
                             if (lastIndexException != 0 && (end * 2) > lastIndexException)
@@ -80,7 +88,6 @@ namespace Business.Logics
                 catch (Exception erro)
                 {
                     lastIndexException = end;
-                    result.DeadCats++;
                     end = mid;
                 }
             }
