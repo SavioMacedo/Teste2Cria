@@ -15,16 +15,16 @@ namespace TesteCria
                 .AddInjections()
                 .BuildServiceProvider();
 
-            var WorldLogics = serviceProvider.GetService<IWordLogics>();
+            var wordLogics = serviceProvider.GetService<IWordLogics>();
 
 
             while (true)
             {
                 Console.Write("Digite a palavra a ser buscada: ");
-                var palavra = Console.ReadLine();
-                Console.WriteLine($"Procurando {palavra}");
+                var word = Console.ReadLine();
+                Console.WriteLine($"Procurando {word}");
 
-                var result = WorldLogics.GetWord(palavra);
+                var result = wordLogics.GetWord(word);
 
                 Console.WriteLine("------------------------------");
                 Console.WriteLine($"Achada: {result.FoundWord} | Gatos Mortos: {result.DeadCats} | Indice: {result.Index}");
